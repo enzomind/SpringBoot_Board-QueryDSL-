@@ -1,0 +1,76 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.7.2'
+    id 'io.spring.dependency-management' version '1.0.12.RELEASE'
+    id 'java'
+    id 'war'
+
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10' //오윤섭 추가 작성_0818
+
+}
+
+group = 'org.zerock'
+version = '0.0.1-SNAPSHOT'
+
+sourceCompatibility = '8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'mysql:mysql-connector-java'
+    annotationProcessor 'org.projectlombok:lombok'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    compileOnly group: 'org.thymeleaf.extras', name: 'thymeleaf-extras-java8time' //오윤섭 추가 작성_0817
+
+    //implementation 'com.querydsl:querydsl-jpa' // gradle 5.0 이상부턴 아래처럼 해야함.
+    implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+    implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+def querydslDir = "$buildDir/generated/querydsl" //Querydsl을 쓰면 코드 내부에서 상황에 맞는 쿼리 생성이 가능하다고 함.
+//Querydsl을 쓰기위해 작성된 엔티티가 아닌 Q도메인?? 이란걸 써야된다고 함. 라이브러리 추가하기위해 아래 내용 작성들어감
+
+querydsl {
+    jpa = true
+    querydslSourcesDir = querydslDir
+}
+
+sourceSets {
+    main.java.srcDir querydslDir
+}
+
+compileQuerydsl{
+    options.annotationProcessorPath = configurations.querydsl
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+    querydsl.extendsFrom compileClasspath
+    //compileQuerydsl 에러 해결 : https://www.inflearn.com/questions/355723 참고
+}
