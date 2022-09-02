@@ -78,7 +78,7 @@ public class BoardRepositorytests {
     }
 
     @Test
-    public void testQuery2() {
+    public void testQuery2() { //제목과 내용 And 조건으로 검색
         Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
 
         QBoard qBoard = QBoard.board;
@@ -101,4 +101,5 @@ public class BoardRepositorytests {
         });
 
     }
+
 }
