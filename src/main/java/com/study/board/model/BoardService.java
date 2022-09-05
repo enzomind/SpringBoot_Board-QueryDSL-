@@ -33,8 +33,14 @@ public interface BoardService {
                 .title(entity.getTitle())
                 .content(entity.getContent())
                 .writer(entity.getWriter())
+                .regDate(entity.getRegDate())
+                .modDate(entity.getModDate())
                 .build();
 
         return dto;
     }
+
+
+    BoardDTO read(Long bno); //조회 페이지 구현하기위해 메서드 추가
+
 }

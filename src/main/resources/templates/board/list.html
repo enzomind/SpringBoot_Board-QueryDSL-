@@ -5,21 +5,27 @@
     <!--dtoList를 반복 처리-->
 
     <th:block th:fragment="content">
-        <h1 class="mt-4">board List Page</h1>
+        <h1 class="mt-4">List
+        <span>
+                <a th:href="@{/board/register}">
+                    <button type="button" class="btn btn-outline-primary">Write</button>
+                </a>
+        </span>
+        </h1>
 
         <table class="table table-striped">
             <thead>
             <tr>
-                <th scope="col">#</th>
                 <th scope="col">No</th>
-                <th scope="col">Title</th>
-                <th scope="col">Regdate</th>
+                <th scope="col">제목</th>
+                <th scope="col">작성자</th>
+                <th scope="col">작성일자</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="dto : ${result.dtoList}">
                 <th scope="row">[[${dto.bno}]]</th>
-                <td>[[${dto.title}]]</td>
+                <td><a th:href="@{/board/read(bno=${dto.bno}, page=${result.page})}">[[${dto.title}]]</a></td>
                 <td>[[${dto.writer}]]</td>
                 <td>[[${#temporals.format(dto.regDate, 'yyyy/MM/dd')}]]</td>
             </tr>
@@ -42,6 +48,41 @@
                <a class="page-link" th:href="@{/board/list(page=${result.end + 1})}">다음</a>
            </li>
        </ul>
+
+
+        <div class="modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Modal body text goes here.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <script th:inline = "javascript">
+
+            var msg = [[${msg}]];
+
+            console.log(msg);
+
+            if(msg) { //새로운 글 등록 후, msg 값이 null이 아니면 모달창 올리기
+                $(".modal").modal();
+            }
+
+        </script>
+
 
     </th:block>
 

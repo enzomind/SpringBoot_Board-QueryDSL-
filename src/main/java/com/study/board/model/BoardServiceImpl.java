@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.function.Function;
 
 @Service
@@ -52,6 +53,16 @@ public class BoardServiceImpl implements BoardService{
 
         return new PageResultDTO<>(result, fn);
 
+    }
+
+    @Override
+    public BoardDTO read(Long bno) {
+
+        Optional<Board> result = boardRepository.findById(bno);
+        //bno를 매개변수로 가져와 리포.findByID를 통해 가져온 bno를 엔티티 객체 result에 담아옴.
+
+        return result.isPresent()? entityToDto(result.get()): null;
+        //result가 존재하면 result를 entitydto로 변환해서 return
     }
 
 
