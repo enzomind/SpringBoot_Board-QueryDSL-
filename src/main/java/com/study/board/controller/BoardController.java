@@ -58,7 +58,7 @@ public class BoardController {
         return "redirect:/board/list";
     }
 
-    @GetMapping("/read")
+    @GetMapping({"/read","/modify"})
     public void read(Long bno, @ModelAttribute("requestDTO") PageRequestDTO pageRequestDTO, Model model) {
         //ModelAttiribute 안써도되지만 requestDTO로 명시하기위해서 사용
 
