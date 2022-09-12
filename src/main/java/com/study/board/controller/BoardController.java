@@ -68,4 +68,32 @@ public class BoardController {
         model.addAttribute("dto", dto);
 
     }
+
+    @PostMapping("/remove")
+    public String remove(long bno, RedirectAttributes redirectAttributes) {
+        log.info("bno : " + bno);
+
+        boardService.remove(bno);
+        redirectAttributes.addFlashAttribute("msg", bno);
+
+        return "redirect:/board/list";
+
+    }
+
+    @PostMapping("/modify")
+    public String modify(BoardDTO boardDTO, //수정해야하는 글 데이터
+                         @ModelAttribute("requestDTO") PageRequestDTO requestDTO, //기존 페이지 정보
+                         RedirectAttributes redirectAttributes) //리다이렉트로 이동할 정보
+    {
+
+        log.info("post modify......................................");
+        log.info("dto : " + boardDTO);
+
+        boardService.modify(boardDTO);
+
+        redirectAttributes.addAttribute("page", requestDTO.getPage());
+        redirectAttributes.addAttribute("bno", boardDTO.getBno());
+
+        return "redirect:/board/read";
+    }
 }

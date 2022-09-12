@@ -6,6 +6,10 @@
     <h1 class="mt-4">Modify</h1>
 
     <form action="/board/modify" method="post">
+
+      <!-- 페이지 번호 -->
+      <input type="hidden" name="page" th:value="${requestDTO.page}">
+
       <div class="form-group">
         <label>번호</label>
         <input type="text" class="form-control" name="bno" th:value="${dto.bno}" readonly>
@@ -14,6 +18,11 @@
       <div class="form-group">
         <label>제목</label>
         <input type="text" class="form-control" name="title" th:value="${dto.title}">
+      </div>
+
+      <div class="form-group">
+        <label>내용</label>
+        <textarea class="form-control" rows="5" name="content">[[${dto.content}]]</textarea>
       </div>
 
       <div class="form-group">
@@ -34,10 +43,51 @@
     </form>
 
 
-    <button type="button" class="btn btn-primary">수정</button>
-    <button type="button" class="btn btn-info">목록으로</button>
-    <button type="button" class="btn btn-danger">삭제</button>
+    <button type="button" class="btn btn-primary modifyBtn">수정</button>
+    <button type="button" class="btn btn-info listBtn">목록으로</button>
+    <button type="button" class="btn btn-danger removeBtn">삭제</button>
 
   </th:block>
 </th:block>
+
+<script th:inline="javascript">
+  var actionForm = $("form") //form 태그 객체
+
+  $(".removeBtn").click(function () {
+    actionForm
+            .attr("action", "/board/remove")
+            .attr("method", "post");
+    actionForm.submit();
+  }); //삭제 테스트 완료
+
+
+
+
+  $(".modifyBtn").click(function (){
+    if(!confirm("수정하시겠습니까?")){
+      return;
+    }
+
+    actionForm
+            .attr("action", "/board/modify")
+            .attr("method", "post")
+            .submit();
+  })
+
+
+
+  $(".listBtn").click(function (){
+    var pageInfo = $("input[name='page']");
+
+    actionForm.empty(); //form 태그의 파라미터들 모두 싹다 지우기
+    actionForm.append(pageInfo); //목록 페이지 이동에 필요한 내용만 추가
+    actionForm
+            .attr("action", "/board/list")
+            .attr("method", "get");
+    // console.log(actionForm.html()); //확인하고 나서 주석처리할 예정
+    actionForm.submit();
+  })
+
+</script>
+
 </html>

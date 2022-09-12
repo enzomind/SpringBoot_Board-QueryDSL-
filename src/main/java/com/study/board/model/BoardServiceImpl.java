@@ -65,5 +65,25 @@ public class BoardServiceImpl implements BoardService{
         //result가 존재하면 result를 entitydto로 변환해서 return
     }
 
+    @Override
+    public void remove(Long bno) {
+        boardRepository.deleteById(bno);
+    }
+
+    @Override
+    public void modify(BoardDTO dto) {
+
+        Optional<Board> result = boardRepository.findById(dto.getBno());
+
+        if (result.isPresent()) { //result 값이 있으면
+            Board entity = result.get(); //entity에 result를 가져와 대입
+
+            entity.changeTitle(dto.getTitle());
+            entity.changeContent(dto.getContent());
+
+            boardRepository.save(entity); //수정한 entity를 save메서드로 저장 처리
+        }
+    }
+
 
 }

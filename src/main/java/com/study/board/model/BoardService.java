@@ -43,4 +43,8 @@ public interface BoardService {
 
     BoardDTO read(Long bno); //조회 페이지 구현하기위해 메서드 추가
 
+    void remove(Long bno);
+    void modify(BoardDTO dto);
+
+
 }
